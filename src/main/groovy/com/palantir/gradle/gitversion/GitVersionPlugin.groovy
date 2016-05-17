@@ -56,7 +56,7 @@ class GitVersionPlugin implements Plugin<Project> {
             String description = gitDesc.get()
 
             if (description.equals(UNSPECIFIED_VERSION)) {
-                return null
+                return new VersionDetails(UNSPECIFIED_VERSION, -1)
             }
 
             if (!(description =~ /.*g.?[0-9a-fA-F]{3,}/)) {

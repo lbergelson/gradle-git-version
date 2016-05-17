@@ -208,7 +208,7 @@ class GitVersionPluginTests extends Specification {
         buildResult.output.contains(':printVersion\n1.0.0\n')
     }
 
-    def 'version details null when no tags are present' () {
+    def 'version details unspecified when no tags are present' () {
         given:
         buildFile << '''
             plugins {
@@ -216,7 +216,8 @@ class GitVersionPluginTests extends Specification {
             }
             version gitVersion()
             task printVersionDetails() << {
-                println versionDetails()
+                println versionDetails().lastTag
+                println versionDetails().commitDistance
             }
         '''.stripIndent()
         Git git = Git.init().setDirectory(projectDir).call();
@@ -225,7 +226,7 @@ class GitVersionPluginTests extends Specification {
         BuildResult buildResult = with('printVersionDetails').build()
 
         then:
-        buildResult.output.contains(':printVersionDetails\nnull\n')
+        buildResult.output.contains(':printVersionDetails\nunspecified\n-1\n')
     }
 
     def 'version details on commit with a tag' () {
